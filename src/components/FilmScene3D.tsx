@@ -1,8 +1,8 @@
 
 import React, { useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, useGLTF, PerspectiveCamera, Environment } from '@react-three/drei';
-import { Group } from 'three';
+import { OrbitControls, PerspectiveCamera, Environment } from '@react-three/drei';
+import { Group, Euler } from 'three';
 
 // Simplified Clapperboard Model
 const ClapperboardModel = () => {
@@ -42,7 +42,10 @@ const ClapperboardModel = () => {
 };
 
 // Film Reel Model
-const FilmReelModel = ({ position = [0, 0, 0], rotation = [0, 0, 0] }) => {
+const FilmReelModel: React.FC<{ position?: [number, number, number], rotation?: [number, number, number] }> = ({ 
+  position = [0, 0, 0], 
+  rotation = [0, 0, 0] 
+}) => {
   const reelRef = useRef<Group>(null);
   
   useFrame((state) => {
@@ -98,14 +101,20 @@ const CameraModel = () => {
       
       {/* Camera lens */}
       <mesh position={[0, 0, 1]} castShadow>
-        <cylinderGeometry args={[0.4, 0.5, 0.8, 32]} rotation={[Math.PI / 2, 0, 0]} />
-        <meshStandardMaterial color="#222222" metalness={0.7} roughness={0.2} />
+        {/* Fixed rotation by placing it directly on the mesh instead of the geometry */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.4, 0.5, 0.8, 32]} />
+          <meshStandardMaterial color="#222222" metalness={0.7} roughness={0.2} />
+        </mesh>
       </mesh>
       
       {/* Lens glass */}
       <mesh position={[0, 0, 1.4]} castShadow>
-        <cylinderGeometry args={[0.35, 0.35, 0.1, 32]} rotation={[Math.PI / 2, 0, 0]} />
-        <meshStandardMaterial color="#444444" metalness={0.9} roughness={0.1} />
+        {/* Fixed rotation by placing it directly on the mesh instead of the geometry */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.35, 0.35, 0.1, 32]} />
+          <meshStandardMaterial color="#444444" metalness={0.9} roughness={0.1} />
+        </mesh>
       </mesh>
     </group>
   );
